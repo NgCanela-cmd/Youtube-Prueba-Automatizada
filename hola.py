@@ -36,9 +36,18 @@ def get_youtube_videos(driver):
                 img {
                     width: 500px;
                     height: 500px;
+                    align-items: center;
                 }
                 ul {
-                    list-style-type: none;
+                    list-style-type: bullet;
+                    text-align: center;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    text-bold: true;
                 }
                 li {
                     margin-bottom: 10px;
@@ -51,6 +60,9 @@ def get_youtube_videos(driver):
                 }
                 body {
                     background-color: rgb(255, 255, 255);
+                    content: "";
+                    justify-content: center;
+                    align-items: center;
                 }   
                 
             </style>
@@ -167,6 +179,57 @@ def get_youtube_videos(driver):
     with open(R_html, "w", encoding="utf-8") as archivo:
       archivo.write(html)
 
+
+    list_video_btn = driver.find_element(By.XPATH,'//*[@id="tabsContent"]/yt-tab-group-shape/div[1]/yt-tab-shape[2]/div[1]')
+    list_video_btn.click()
+    time.sleep(2)
+    for s in range(4):
+         driver.execute_script("window.scrollBy(0, 700)")
+         time.sleep(1)
+ 
+    for s in range(4):
+         driver.execute_script("window.scrollBy(0,-700)")
+         
+   
+    list_video_btn = driver.find_element(By.XPATH,'//*[@id="tabsContent"]/yt-tab-group-shape/div[1]/yt-tab-shape[1]')
+    list_video_btn.click()
+    time.sleep(1)
+ 
+    view_video = driver.find_element(By.XPATH, '//*[@id="items"]/ytd-grid-video-renderer[1]')
+    view_video.click()
+    time.sleep(20)  
+ 
+    #skip_btn = driver.find_element(By.XPATH,'//*[@id="skip-button:2"]')
+    #skip_btn.click()
+ 
+    settings_btn = driver.find_element(By.CLASS_NAME,'ytp-settings-button')
+    settings_btn.click()
+    time.sleep(5)
+ 
+    path_settings = os.path.join(os.path.expanduser("~"), "Imágenes", "settings.png")
+    path_settings1 = os.path.join(os.path.expanduser("~"), "Imágenes")
+    driver.save_screenshot(path_settings)
+    print(f"Captura de la configuración guardada en: { path_settings1 }")
+ 
+    with open(path_settings, "rb") as img_file:
+         img_filter_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+    html += """
+    <h2>Captura del Settings:</h2>
+    <img src="data:image/png;base64,""" + img_filter_base64 + """" width="1080"/>
+    """
+    with open(R_html, "w", encoding="utf-8") as archivo:
+      archivo.write(html)
+    time.sleep(1)
+ 
+ 
+    for s in range(10):
+         driver.execute_script("window.scrollBy(0, 500)")
+         time.sleep(1)
+ 
+    for s in range(10):
+         driver.execute_script("window.scrollBy(0, -500)")
+         time.sleep(1)
+
     
 
 
@@ -189,7 +252,7 @@ def view_youtube_videos(driver):
 
    view_video = driver.find_element(By.XPATH, '//*[@id="items"]/ytd-grid-video-renderer[1]')
    view_video.click()
-   time.sleep(5)  
+   time.sleep(20)  
 
    #skip_btn = driver.find_element(By.XPATH,'//*[@id="skip-button:2"]')
    #skip_btn.click()
@@ -198,16 +261,29 @@ def view_youtube_videos(driver):
    settings_btn.click()
    time.sleep(5)
 
-   path_german = os.path.join(os.path.expanduser("~"), "Imágenes", "settings.png")
-   path_german1 = os.path.join(os.path.expanduser("~"), "Imágenes")
-   driver.save_screenshot(path_german)
-   print(f"Captura de la configuración guardada en: {path_german1}")
+   path_settings = os.path.join(os.path.expanduser("~"), "Imágenes", "settings.png")
+   path_settings1 = os.path.join(os.path.expanduser("~"), "Imágenes")
+   driver.save_screenshot(path_settings)
+   print(f"Captura de la configuración guardada en: { path_settings1 }")
+
+   with open(path_settings, "rb") as img_file:
+        img_filter_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+   html += """
+   <h2>Captura del Filtro:</h2>
+   <img src="data:image/png;base64,""" + img_filter_base64 + """" width="1080"/>
+   """
+   with open(R_html, "w", encoding="utf-8") as archivo:
+     archivo.write(html)
+   time.sleep(1)
 
 
    for s in range(10):
         driver.execute_script("window.scrollBy(0, 500)")
         time.sleep(1)
 
+   for s in range(10):
+        driver.execute_script("window.scrollBy(0, -500)")
+        time.sleep(1)
    
         
 def filter_videos(driver):
@@ -249,7 +325,7 @@ def main():
 
 
     get_youtube_videos(driver)
-    view_youtube_videos(driver)
+   # view_youtube_videos(driver)
     driver.quit()
 
 
