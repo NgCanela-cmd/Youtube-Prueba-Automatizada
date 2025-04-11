@@ -32,6 +32,28 @@ def get_youtube_videos(driver):
         <head>
             <meta charset="UTF-8">
             <title>Reporte de YouTube</title>
+            <style>
+                img {
+                    width: 500px;
+                    height: 500px;
+                }
+                ul {
+                    list-style-type: none;
+                }
+                li {
+                    margin-bottom: 10px;
+                }
+                h1 {
+                    text-align: center;
+                }
+                h2 {
+                    text-align: center;
+                }
+                body {
+                    background-color: rgb(255, 255, 255);
+                }   
+                
+            </style>
         </head>
         <body>
             <h1>Reporte de Prueba Automatizada</h1>
@@ -86,7 +108,27 @@ def get_youtube_videos(driver):
             
     """
 
-    filter_videos(driver)
+    #filter_videos(driver)
+
+    filter_btn = driver.find_element(By.XPATH,'//*[@id="filter-button"]/ytd-button-renderer/yt-button-shape/button/yt-touch-feedback-shape/div/div[2]')
+    filter_btn.click()
+    time.sleep(2)
+    path_filter = os.path.join(os.path.expanduser("~"), "Imágenes", "filter.png")
+    path_filter1 = os.path.join(os.path.expanduser("~"), "Imágenes")
+    driver.save_screenshot(path_filter)
+    print(f"Captura de los filtros guardada en: {path_filter1}")
+    filte_btn = driver.find_element(By.ID,'close-button')
+    filte_btn.click()
+
+    with open(path_filter, "rb") as img_file:
+        img_filter_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+    html += """
+    <h2>Captura del Filtro:</h2>
+    <img src="data:image/png;base64,""" + img_filter_base64 + """" width="1080"/>
+    """
+    with open(R_html, "w", encoding="utf-8") as archivo:
+      archivo.write(html)
+    time.sleep(1)
 
     try:
         tabs = driver.find_elements(By.XPATH, '//yt-chip-cloud-chip-renderer//a')
@@ -154,6 +196,7 @@ def view_youtube_videos(driver):
 
    settings_btn = driver.find_element(By.CLASS_NAME,'ytp-settings-button')
    settings_btn.click()
+   time.sleep(5)
 
    path_german = os.path.join(os.path.expanduser("~"), "Imágenes", "settings.png")
    path_german1 = os.path.join(os.path.expanduser("~"), "Imágenes")
